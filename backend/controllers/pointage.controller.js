@@ -9,7 +9,7 @@ export const getPointages = async (req, res) => {
 };
 
 export const createPointage = async (req, res) => {
-  const { nom, rapport } = req.body;
+  const { nom, rapport, date, timeIn, timeOut, totalHours, project } = req.body;
 
   if (!nom || !rapport) return res.status(400).json({ message: 'Nom et rapport obligatoires' });
 
@@ -18,8 +18,13 @@ export const createPointage = async (req, res) => {
 
   const pointage = await Pointage.create({
     rapport,
+    date,
+    timeIn,
+    timeOut,
+    totalHours,
+    project,
     employeId: employe.id,
   });
 
   res.status(201).json(pointage);
-}; 
+};
