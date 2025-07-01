@@ -18,7 +18,7 @@ app.use('/pointages', pointageRouter);
 app.use('/', authRouter);
 
 const start = async () => {
-  await sequelize.sync({ alter: true });
+  // await sequelize.sync({ force: true },console.log('Database synced successfully'));
   app.listen(4000, () => console.log('Backend running on http://localhost:4000'));
 };
 

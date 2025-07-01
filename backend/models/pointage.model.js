@@ -8,6 +8,9 @@ export default (sequelize) => {
     timeOut: { type: DataTypes.TIME, allowNull: true },
     totalHours: { type: DataTypes.STRING, allowNull: true },
     project: { type: DataTypes.STRING, allowNull: true },
+    typePointage: { type: DataTypes.STRING, allowNull: false },
+    taskType: { type: DataTypes.STRING, allowNull: false },
+    documentCode: { type: DataTypes.STRING, allowNull: true },
   }, { timestamps: false });
 
   return Pointage;

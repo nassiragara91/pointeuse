@@ -8,7 +8,10 @@ export default function AddPointage() {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [timeIn, setTimeIn] = useState('');
   const [timeOut, setTimeOut] = useState('');
+  const [typePointage, setTypePointage] = useState('affaire');
   const [project, setProject] = useState('');
+  const [documentCode, setDocumentCode] = useState('');
+  const [taskType, setTaskType] = useState('Conception');
   const router = useRouter();
 
   // Calculate total hours worked
@@ -51,20 +54,23 @@ export default function AddPointage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const body = {
+        nom,
+        rapport,
+        date,
+        timeIn,
+        timeOut,
+        totalHours: getTotalHours(),
+        typePointage,
+        taskType,
+        ...(typePointage === 'affaire' ? { project } : { documentCode }),
+      };
       const res = await fetch('http://localhost:4000/pointages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          nom,
-          rapport,
-          date,
-          timeIn,
-          timeOut,
-          totalHours: getTotalHours(),
-          project,
-        }),
+        body: JSON.stringify(body),
         credentials: 'include',
       });
 
@@ -75,6 +81,8 @@ export default function AddPointage() {
         setTimeIn('');
         setTimeOut('');
         setProject('');
+        setDocumentCode('');
+        setTypePointage('affaire');
         fetchPointages();
       } else if (res.status === 401) {
         router.push('/login');
@@ -138,17 +146,70 @@ export default function AddPointage() {
                 />
               </div>
               <div>
-                <label htmlFor="project" className="block text-sm font-medium text-gray-900">
-                  📂 Projet ou Tâche (optionnel)
+                <label htmlFor="typePointage" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                  <span role="img" aria-label="choix">✅</span> Sélectionner le type de pointage
                 </label>
-                <input
-                  type="text"
-                  id="project"
-                  value={project}
-                  onChange={(e) => setProject(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
-                  placeholder="Projet ou tâche"
-                />
+                <select
+                  id="typePointage"
+                  value={typePointage}
+                  onChange={e => setTypePointage(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                  required
+                >
+                  <option value="affaire">Pointage sur Affaire</option>
+                  <option value="document">Pointage sur Document</option>
+                </select>
+              </div>
+              {typePointage === 'affaire' && (
+                <div>
+                  <label htmlFor="project" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                    <span role="img" aria-label="projet">📂</span> Nom du projet
+                  </label>
+                  <input
+                    type="text"
+                    id="project"
+                    value={project}
+                    onChange={e => setProject(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+                    placeholder="Nom du projet"
+                    required
+                  />
+                </div>
+              )}
+              {typePointage === 'document' && (
+                <div>
+                  <label htmlFor="documentCode" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                    <span role="img" aria-label="document">📄</span> Nom ou code du document
+                  </label>
+                  <input
+                    type="text"
+                    id="documentCode"
+                    value={documentCode}
+                    onChange={e => setDocumentCode(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+                    placeholder="Nom ou code du document"
+                    required
+                  />
+                </div>
+              )}
+              <div>
+                <label htmlFor="taskType" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                  <span role="img" aria-label="tache">📌</span> Type de tâche
+                </label>
+                <select
+                  id="taskType"
+                  value={taskType}
+                  onChange={e => setTaskType(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                  required
+                >
+                  <option value="Conception">Conception</option>
+                  <option value="Calcul technique">Calcul technique</option>
+                  <option value="Revue documentaire">Revue documentaire</option>
+                  <option value="Réunion client">Réunion client</option>
+                  <option value="Déplacement terrain">Déplacement terrain</option>
+                  <option value="Autre">Autre</option>
+                </select>
               </div>
               <div>
                 <label htmlFor="timeIn" className="block text-sm font-medium text-gray-900">
@@ -203,14 +264,21 @@ export default function AddPointage() {
           <ul className="space-y-4">
             {pointages.map((pointage) => (
               <li key={pointage.id} className="border-b border-gray-200 pb-4">
-                <p className="text-lg font-semibold text-gray-900">{pointage.Employe.nom}</p>
-                <p className="text-gray-700">{pointage.rapport}</p>
+                <p className="text-lg font-semibold text-gray-900">👤 {pointage.Employe?.nom || pointage.nom}</p>
+                <p className="text-gray-700">📝 {pointage.rapport}</p>
                 <div className="flex flex-wrap gap-4 text-sm mt-2 text-gray-700">
                   <span>📅 {pointage.date ? new Date(pointage.date).toLocaleDateString() : ''}</span>
                   <span>🕒 {pointage.timeIn || '-'}</span>
                   <span>🕔 {pointage.timeOut || '-'}</span>
                   <span>⏱️ {pointage.totalHours || '-'}</span>
-                  {pointage.project && <span>📂 {pointage.project}</span>}
+                  <span>✅ {pointage.typePointage}</span>
+                  <span>📌 {pointage.taskType}</span>
+                  {pointage.typePointage === 'affaire' && pointage.project && (
+                    <span>📂 {pointage.project}</span>
+                  )}
+                  {pointage.typePointage === 'document' && pointage.documentCode && (
+                    <span>📄 {pointage.documentCode}</span>
+                  )}
                 </div>
               </li>
             ))}

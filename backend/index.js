@@ -32,7 +32,7 @@ app.post('/pointages', async (req, res) => {
 });
 
 const start = async () => {
-  await sequelize.sync({ alter: true });
+  // await sequelize.sync({ force: true });
   app.listen(4000, () => console.log('Backend running on http://localhost:4000'));
 };
 
