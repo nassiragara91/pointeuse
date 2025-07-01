@@ -119,98 +119,85 @@ export default function AddPointage() {
               />
             </div>
             <div>
-              <label htmlFor="rapport" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
-                <span role="img" aria-label="rapport">📝</span> Rapport
+              <label htmlFor="date" className="block text-sm font-medium text-gray-900">
+                📅 Date
               </label>
-              <textarea
-                id="rapport"
-                value={rapport}
-                onChange={(e) => setRapport(e.target.value)}
-                rows="3"
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+              <input
+                type="date"
+                id="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
                 required
-              ></textarea>
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="typePointage" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                <span role="img" aria-label="choix">✅</span> Sélectionner le type de pointage
+              </label>
+              <select
+                id="typePointage"
+                value={typePointage}
+                onChange={e => setTypePointage(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                required
+              >
+                <option value="affaire">Pointage sur Affaire</option>
+                <option value="document">Pointage sur Document</option>
+              </select>
+            </div>
+            {typePointage === 'affaire' && (
               <div>
-                <label htmlFor="date" className="block text-sm font-medium text-gray-900">
-                  📅 Date
+                <label htmlFor="project" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                  <span role="img" aria-label="projet">📂</span> Nom du projet
                 </label>
                 <input
-                  type="date"
-                  id="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                  type="text"
+                  id="project"
+                  value={project}
+                  onChange={e => setProject(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+                  placeholder="Nom du projet"
                   required
                 />
               </div>
+            )}
+            {typePointage === 'document' && (
               <div>
-                <label htmlFor="typePointage" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
-                  <span role="img" aria-label="choix">✅</span> Sélectionner le type de pointage
+                <label htmlFor="documentCode" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                  <span role="img" aria-label="document">📄</span> Nom ou code du document
                 </label>
-                <select
-                  id="typePointage"
-                  value={typePointage}
-                  onChange={e => setTypePointage(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                <input
+                  type="text"
+                  id="documentCode"
+                  value={documentCode}
+                  onChange={e => setDocumentCode(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+                  placeholder="Nom ou code du document"
                   required
-                >
-                  <option value="affaire">Pointage sur Affaire</option>
-                  <option value="document">Pointage sur Document</option>
-                </select>
+                />
               </div>
-              {typePointage === 'affaire' && (
-                <div>
-                  <label htmlFor="project" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
-                    <span role="img" aria-label="projet">📂</span> Nom du projet
-                  </label>
-                  <input
-                    type="text"
-                    id="project"
-                    value={project}
-                    onChange={e => setProject(e.target.value)}
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
-                    placeholder="Nom du projet"
-                    required
-                  />
-                </div>
-              )}
-              {typePointage === 'document' && (
-                <div>
-                  <label htmlFor="documentCode" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
-                    <span role="img" aria-label="document">📄</span> Nom ou code du document
-                  </label>
-                  <input
-                    type="text"
-                    id="documentCode"
-                    value={documentCode}
-                    onChange={e => setDocumentCode(e.target.value)}
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
-                    placeholder="Nom ou code du document"
-                    required
-                  />
-                </div>
-              )}
-              <div>
-                <label htmlFor="taskType" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
-                  <span role="img" aria-label="tache">📌</span> Type de tâche
-                </label>
-                <select
-                  id="taskType"
-                  value={taskType}
-                  onChange={e => setTaskType(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
-                  required
-                >
-                  <option value="Conception">Conception</option>
-                  <option value="Calcul technique">Calcul technique</option>
-                  <option value="Revue documentaire">Revue documentaire</option>
-                  <option value="Réunion client">Réunion client</option>
-                  <option value="Déplacement terrain">Déplacement terrain</option>
-                  <option value="Autre">Autre</option>
-                </select>
-              </div>
+            )}
+            <div>
+              <label htmlFor="taskType" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                <span role="img" aria-label="tache">📌</span> Type de tâche
+              </label>
+              <select
+                id="taskType"
+                value={taskType}
+                onChange={e => setTaskType(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                required
+              >
+                <option value="Conception">Conception</option>
+                <option value="Calcul technique">Calcul technique</option>
+                <option value="Revue documentaire">Revue documentaire</option>
+                <option value="Réunion client">Réunion client</option>
+                <option value="Déplacement terrain">Déplacement terrain</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="timeIn" className="block text-sm font-medium text-gray-900">
                   🕒 Heure d'entrée
@@ -237,18 +224,31 @@ export default function AddPointage() {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-900">
-                  ⏱️ Total heures travaillées (auto)
-                </label>
-                <input
-                  type="text"
-                  value={getTotalHours()}
-                  readOnly
-                  className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm text-gray-900"
-                  tabIndex={-1}
-                />
-              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                ⏱️ Total heures travaillées (auto)
+              </label>
+              <input
+                type="text"
+                value={getTotalHours()}
+                readOnly
+                className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm text-gray-900"
+                tabIndex={-1}
+              />
+            </div>
+            <div>
+              <label htmlFor="rapport" className="block text-sm font-medium text-gray-900 flex items-center gap-1">
+                <span role="img" aria-label="rapport">📝</span> Rapport
+              </label>
+              <textarea
+                id="rapport"
+                value={rapport}
+                onChange={(e) => setRapport(e.target.value)}
+                rows="3"
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 placeholder-gray-400"
+                required
+              ></textarea>
             </div>
             <button
               type="submit"
@@ -260,26 +260,57 @@ export default function AddPointage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-900">Pointages Récents</h2>
-          <ul className="space-y-4">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-900">Pointages Récents</h2>
+          <ul className="space-y-6">
             {pointages.map((pointage) => (
-              <li key={pointage.id} className="border-b border-gray-200 pb-4">
-                <p className="text-lg font-semibold text-gray-900">👤 {pointage.Employe?.nom || pointage.nom}</p>
-                <p className="text-gray-700">📝 {pointage.rapport}</p>
-                <div className="flex flex-wrap gap-4 text-sm mt-2 text-gray-700">
-                  <span>📅 {pointage.date ? new Date(pointage.date).toLocaleDateString() : ''}</span>
-                  <span>🕒 {pointage.timeIn || '-'}</span>
-                  <span>🕔 {pointage.timeOut || '-'}</span>
-                  <span>⏱️ {pointage.totalHours || '-'}</span>
-                  <span>✅ {pointage.typePointage}</span>
-                  <span>📌 {pointage.taskType}</span>
+              <li key={pointage.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                  <h3 className="text-xl font-bold text-gray-900">👤 {pointage.Employe?.nom || pointage.nom}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      ✅ {pointage.typePointage}
+                    </span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      📌 {pointage.taskType}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
+                  <span className="flex items-center gap-1">
+                    <span>🗓️</span>
+                    <span>{pointage.date ? new Date(pointage.date).toLocaleDateString() : ''}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span>🕗</span>
+                    <span>{pointage.timeIn || '-'} - {pointage.timeOut || '-'}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span>⏱️</span>
+                    <span className="font-semibold">{pointage.totalHours || '-'}</span>
+                  </span>
+                </div>
+                
+                <div className="flex flex-wrap gap-2 mb-3">
                   {pointage.typePointage === 'affaire' && pointage.project && (
-                    <span>📂 {pointage.project}</span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                      📂 {pointage.project}
+                    </span>
                   )}
                   {pointage.typePointage === 'document' && pointage.documentCode && (
-                    <span>📄 {pointage.documentCode}</span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                      📄 {pointage.documentCode}
+                    </span>
                   )}
                 </div>
+                
+                {pointage.rapport && (
+                  <div className="pt-3 border-t border-gray-200">
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      <span className="font-medium">📝</span> {pointage.rapport}
+                    </p>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
