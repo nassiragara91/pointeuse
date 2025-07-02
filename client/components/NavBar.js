@@ -14,7 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const navLinks = [
-  { name: 'GED', icon: DocumentTextIcon, href: '#' },
+  { name: 'GED', icon: DocumentTextIcon, href: '/ged' },
   { name: 'Rapports', icon: ChartBarIcon, href: '#' },
   { name: 'Applications', icon: Squares2X2Icon, href: '#' },
   { name: 'Recherche', icon: MagnifyingGlassIcon, href: '#' },
