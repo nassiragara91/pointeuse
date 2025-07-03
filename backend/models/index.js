@@ -17,5 +17,7 @@ const Rapport = rapportModel(sequelize);
 
 Employe.hasMany(Pointage, { foreignKey: 'employeId' });
 Pointage.belongsTo(Employe, { foreignKey: 'employeId' });
+Employe.hasMany(Document, { foreignKey: 'employeId' });
+Document.belongsTo(Employe, { foreignKey: 'employeId' });
 
 export { sequelize, Employe, Pointage, Document, Rapport };

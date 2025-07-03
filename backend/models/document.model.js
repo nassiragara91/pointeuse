@@ -33,6 +33,10 @@ export default (sequelize) => {
       type: DataTypes.BLOB('long'),
       allowNull: false,
     },
+    employeId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   }, {
     timestamps: false,
     tableName: 'documents',

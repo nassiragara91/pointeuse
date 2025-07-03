@@ -1,9 +1,13 @@
 import { Pointage, Employe } from '../models/index.js';
 
 export const getPointages = async (req, res) => {
+  // Si req.user existe, filtre par employé connecté
+  const where = req.user ? { employeId: req.user.id } : {};
   const data = await Pointage.findAll({
+    where,
     include: Employe,
     order: [['date', 'DESC']],
+    limit: 5,
   });
   res.json(data);
 };

@@ -49,7 +49,10 @@ export default function GED() {
     formData.append('file', file);
     formData.append('projet', projet);
     try {
-      await axios.post('http://localhost:4000/documents/documents', formData);
+      await axios.post('http://localhost:4000/documents/documents', formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       setProjet('');
       setFile(null);
       fileInputRef.current.value = '';

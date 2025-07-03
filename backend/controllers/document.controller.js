@@ -68,6 +68,7 @@ export const createDocument = async (req, res) => {
       version,
       fichier: file.buffer,
       dateAjout: new Date(),
+      employeId: req.user ? req.user.id : null,
     });
     res.status(201).json(newDoc);
   } catch (error) {

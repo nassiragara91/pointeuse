@@ -13,7 +13,7 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, 'your_jwt_secret');
 
       // Get user from the token
-      req.employe = await Employe.findByPk(decoded.id, {
+      req.user = await Employe.findByPk(decoded.id, {
         attributes: { exclude: ['password'] },
       });
 
@@ -22,9 +22,7 @@ const protect = async (req, res, next) => {
       console.error(error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401).json({ message: 'Not authorized, no token' });
   }
 };

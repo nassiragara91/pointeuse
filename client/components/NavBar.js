@@ -55,7 +55,7 @@ export default function NavBar() {
         </div>
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-6 text-sm font-medium text-white">
-          <a href="/" className="flex items-center gap-1 hover:text-blue-200 transition">
+          <a href="/accueil" className="flex items-center gap-1 hover:text-blue-200 transition">
             <HomeIcon className="h-5 w-5" /> Accueil
           </a>
           {navLinks.map(({ name, icon: Icon, href }) => (
@@ -114,7 +114,7 @@ export default function NavBar() {
       {menuOpen && (
         <div className="md:hidden bg-blue-600 px-4 pb-4">
           <div className="flex flex-col space-y-2 mt-2">
-            <a href="/" className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
+            <a href="/accueil" className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
               <HomeIcon className="h-5 w-5" /> Accueil
             </a>
             {navLinks.map(({ name, icon: Icon, href }) => (
