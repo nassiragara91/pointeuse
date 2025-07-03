@@ -4,7 +4,7 @@ import pointageModel from './pointage.model.js';
 import documentModel from './document.model.js';
 import rapportModel from './rapport.model.js';
 
-const sequelize = new Sequelize('pointage', 'postgres', 'pp25531189', {
+const sequelize = new Sequelize('pointage', 'postgres', 'root', {
   host: 'localhost',
   dialect: 'postgres',
   logging: false,

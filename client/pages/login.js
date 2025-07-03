@@ -35,7 +35,7 @@ export default function LoginPage() {
       });
 
       if (res.ok) {
-        router.push('/'); // Redirect to homepage on successful login
+        router.push('/accueil'); // Redirect to dashboard on successful login
       } else {
         const data = await res.json();
         setError(data.message || 'Erreur de connexion. Veuillez réessayer.');
