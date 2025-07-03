@@ -5,6 +5,7 @@ import { sequelize, Employe, Pointage } from './models/index.js';
 import pointageRouter from './routers/pointage.router.js';
 import authRouter from './routers/auth.router.js';
 import documentRouter from './routers/document.router.js';
+import rapportRouter from './routers/rapport.router.js';
 
 const app = express();
 
@@ -20,10 +21,11 @@ app.use('/pointages', pointageRouter);
 app.use('/', authRouter);
 app.use('/uploads', express.static('uploads'));
 app.use('/documents', documentRouter);
+app.use('/rapports', rapportRouter);
 
 
 const start = async () => {
-//   await sequelize.sync({ force: true }); 
+  // await sequelize.sync({ force: true }); 
   app.listen(4000, () => console.log('Backend running on http://localhost:4000'));
 };
 

@@ -31,3 +31,17 @@ export const createPointage = async (req, res) => {
 
   res.status(201).json(pointage);
 };
+
+export const updatePointage = async (req, res) => {
+  const { id } = req.params;
+  const { rapport } = req.body;
+  try {
+    const pointage = await Pointage.findByPk(id);
+    if (!pointage) return res.status(404).json({ message: 'Pointage non trouvé' });
+    if (rapport !== undefined) pointage.rapport = rapport;
+    await pointage.save();
+    res.json(pointage);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la mise à jour', error });
+  }
+};

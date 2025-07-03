@@ -11,11 +11,13 @@ import {
   EnvelopeIcon,
   HomeIcon,
   ChevronDownIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline';
 
 const navLinks = [
+  { name: 'Pointage', icon: ClockIcon, href: '/addPointage' },
   { name: 'GED', icon: DocumentTextIcon, href: '/ged' },
-  { name: 'Rapports', icon: ChartBarIcon, href: '#' },
+  { name: 'Rapports', icon: ChartBarIcon, href: '/rapports' },
   { name: 'Applications', icon: Squares2X2Icon, href: '#' },
   { name: 'Recherche', icon: MagnifyingGlassIcon, href: '#' },
 ];
