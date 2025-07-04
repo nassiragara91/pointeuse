@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,14 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const { user, login } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,26 +34,15 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        router.push('/accueil'); // Redirect to dashboard on successful login
-      } else {
-        const data = await res.json();
-        setError(data.message || 'Erreur de connexion. Veuillez réessayer.');
-      }
-    } catch (err) {
-      setError('Erreur de connexion. Veuillez réessayer.');
-    } finally {
-      setIsLoading(false);
+    const result = await login(formData.email, formData.password);
+    
+    if (result.success) {
+      router.push('/accueil'); // Redirect to accueil page on successful login
+    } else {
+      setError(result.error || 'Erreur de connexion. Veuillez réessayer.');
     }
+    
+    setIsLoading(false);
   };
 
   return (

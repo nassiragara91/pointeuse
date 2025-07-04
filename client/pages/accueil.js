@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useAuth } from "../contexts/AuthContext"
+import ProtectedRoute from "../components/ProtectedRoute"
 import {
   ClockIcon,
   DocumentTextIcon,
@@ -12,34 +14,69 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline"
 import Link from "next/link"
-import axios from "axios"
 
 export default function Accueil() {
-  const [nomUtilisateur, setNomUtilisateur] = useState("Utilisateur")
+  const { user } = useAuth()
   const [recent, setRecent] = useState([])
   const [loading, setLoading] = useState(true)
+  const [userName, setUserName] = useState("Utilisateur")
 
-  // Récupère le nom de l'utilisateur connecté
+  // Debug user object
+  console.log('User object in accueil:', user)
+
+  // Get user name from auth context or fetch it directly
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/me", { withCredentials: true })
-      .then((res) => setNomUtilisateur(res.data.nom))
-      .catch(() => setNomUtilisateur("Utilisateur"))
-  }, [])
+    if (user?.nom) {
+      setUserName(user.nom)
+    } else if (user?.id) {
+      // Fallback: fetch user data directly
+      fetch('/api/auth/check', {
+        credentials: 'include',
+      })
+        .then((res) => res.json())
+        .then((userData) => {
+          console.log('Fetched user data:', userData)
+          if (userData.nom) {
+            setUserName(userData.nom)
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error)
+        })
+    }
+  }, [user])
+
+  const nomUtilisateur = userName
 
   // Récupère les 5 dernières activités tous types confondus
   useEffect(() => {
     setLoading(true)
-    axios
-      .get("http://localhost:4000/activites", { withCredentials: true })
-      .then((res) => setRecent(res.data))
-      .catch(() => setRecent([]))
+    fetch("/api/activites", {
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Accueil page received data:', data);
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setRecent(data)
+        } else if (data && Array.isArray(data.activites)) {
+          setRecent(data.activites)
+        } else {
+          console.warn('Activities data is not an array:', data)
+          setRecent([])
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching activities:', error)
+        setRecent([])
+      })
       .finally(() => setLoading(false))
   }, [])
 
   // Vérifie si un pointage du jour existe
   const today = new Date().toISOString().slice(0, 10)
-  const hasTodayPointage = recent.some((a) => a.date === today)
+  const hasTodayPointage = Array.isArray(recent) && recent.some((a) => a.date === today)
 
   const quickActions = [
     {
@@ -81,10 +118,11 @@ export default function Accueil() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -269,5 +307,6 @@ export default function Accueil() {
         </div>
       </main>
     </div>
+    </ProtectedRoute>
   )
 }

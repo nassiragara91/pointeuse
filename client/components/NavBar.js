@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import Link from 'next/link';
 // import Image from 'next/image'; // Plus nécessaire
 import {
   DocumentTextIcon,
@@ -18,7 +20,7 @@ const navLinks = [
   { name: 'Pointage', icon: ClockIcon, href: '/addPointage' },
   { name: 'GED', icon: DocumentTextIcon, href: '/ged' },
   { name: 'Rapports', icon: ChartBarIcon, href: '/rapports' },
-  { name: 'Applications', icon: Squares2X2Icon, href: '#' },
+  // { name: 'Applications', icon: Squares2X2Icon, href: '#' },
   { name: 'Recherche', icon: MagnifyingGlassIcon, href: '#' },
 ];
 
@@ -26,8 +28,9 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef();
-  // À remplacer par ta vraie logique d'authentification
-  const isAdmin = true; // ou false pour tester
+  const { user, logout } = useAuth();
+  // Check if user is admin (you can modify this logic based on your user roles)
+  const isAdmin = user && user.role === 'admin';
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -55,13 +58,13 @@ export default function NavBar() {
         </div>
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-6 text-sm font-medium text-white">
-          <a href="/accueil" className="flex items-center gap-1 hover:text-blue-200 transition">
+          <Link href="/accueil" className="flex items-center gap-1 hover:text-blue-200 transition">
             <HomeIcon className="h-5 w-5" /> Accueil
-          </a>
+          </Link>
           {navLinks.map(({ name, icon: Icon, href }) => (
-            <a key={name} href={href} className="flex items-center gap-1 hover:text-blue-200 transition">
+            <Link key={name} href={href} className="flex items-center gap-1 hover:text-blue-200 transition">
               <Icon className="h-5 w-5" /> {name}
-            </a>
+            </Link>
           ))}
           {isAdmin && (
             <a href="http://localhost:3001/dashbord" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-blue-200 transition">
@@ -85,14 +88,14 @@ export default function NavBar() {
             </button>
             {profileOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg py-1 z-30 animate-fade-in">
-                <a
+                <Link
                   href="/profile"
                   className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 text-sm"
                 >
                   Mon profil
-                </a>
+                </Link>
                 <button
-                  onClick={() => { window.location.href = '/login'; }}
+                  onClick={logout}
                   className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 text-sm"
                 >
                   Déconnexion
@@ -114,13 +117,13 @@ export default function NavBar() {
       {menuOpen && (
         <div className="md:hidden bg-blue-600 px-4 pb-4">
           <div className="flex flex-col space-y-2 mt-2">
-            <a href="/accueil" className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
+            <Link href="/accueil" className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
               <HomeIcon className="h-5 w-5" /> Accueil
-            </a>
+            </Link>
             {navLinks.map(({ name, icon: Icon, href }) => (
-              <a key={name} href={href} className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
+              <Link key={name} href={href} className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">
                 <Icon className="h-5 w-5" /> {name}
-              </a>
+              </Link>
             ))}
             {isAdmin && (
               <a href="http://localhost:3001/dashbord" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white py-2 px-2 rounded hover:bg-blue-500 transition">

@@ -15,10 +15,18 @@ export const login = async (req, res) => {
   }
 
   const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', {
-    expiresIn: '1h',
+    expiresIn: '7d',
   });
 
-  res.json({ token });
+  res.json({ 
+    token,
+    user: {
+      id: employe.id,
+      nom: employe.nom,
+      email: employe.email,
+      role: employe.role || 'user'
+    }
+  });
 };
 
 export const register = async (req, res) => {
@@ -32,7 +40,7 @@ export const register = async (req, res) => {
   }
   try {
     const employe = await Employe.create({ nom, email, password });
-    const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', { expiresIn: '7d' });
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la création du compte.' });
@@ -42,4 +50,21 @@ export const register = async (req, res) => {
 export const getMe = async (req, res) => {
   if (!req.user) return res.status(401).json({ message: 'Non authentifié' });
   res.json({ nom: req.user.nom, email: req.user.email });
+};
+
+export const verify = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: 'Non authentifié' });
+  
+  // Get full user data from database
+  const employe = await Employe.findByPk(req.user.id);
+  if (!employe) {
+    return res.status(401).json({ message: 'Utilisateur non trouvé' });
+  }
+  
+  res.json({
+    id: employe.id,
+    nom: employe.nom,
+    email: employe.email,
+    role: employe.role || 'user' // Add role field if it exists in your model
+  });
 }; 
