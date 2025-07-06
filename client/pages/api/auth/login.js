@@ -27,12 +27,12 @@ export default async function handler(req, res) {
     res.setHeader('Set-Cookie', serialize('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== 'development',
-      maxAge: 60 * 60, // 1 hour
-      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 7, // 7 days to match JWT expiration
+      sameSite: 'lax',
       path: '/',
     }));
 
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful', user: data.user });
   } catch (error) {
     console.error('Login API error:', error);
     res.status(500).json({ message: 'Internal Server Error' });

@@ -1,19 +1,14 @@
-import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function Home() {
+export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push('/login');
-      } else {
-        router.push('/accueil');
-      }
+    if (!loading && !user) {
+      router.push('/login');
     }
   }, [user, loading, router]);
 
@@ -26,6 +21,10 @@ export default function Home() {
     );
   }
 
-  // Don't render anything (will redirect)
-  return null;
-}
+  // Don't render anything if not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
+
+  return children;
+} 

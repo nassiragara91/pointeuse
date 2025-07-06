@@ -1,38 +1,33 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { sequelize, Employe, Pointage } from './models/index.js';
+import pointageRouter from './routers/pointage.router.js';
+import authRouter from './routers/auth.router.js';
+import documentRouter from './routers/document.router.js';
+import rapportRouter from './routers/rapport.router.js';
+import activiteRouter from './routers/activite.router.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000',
+}));
 app.use(express.json());
+app.use(cookieParser());
 
-app.get('/poigesnta', async (req, res) => {
-  const data = await Pointage.findAll({
-    include: Employe,
-    order: [['date', 'DESC']],
-  });
-  res.json(data);
-});
+// Modular routers
+app.use('/pointages', pointageRouter);
+app.use('/', authRouter);
+app.use('/uploads', express.static('uploads'));
+app.use('/documents', documentRouter);
+app.use('/rapports', rapportRouter);
+app.use('/activites', activiteRouter);
 
-app.post('/pointages', async (req, res) => {
-  const { nom, rapport } = req.body;
-
-  if (!nom || !rapport) return res.status(400).json({ message: 'Nom et rapport obligatoires' });
-
-  let employe = await Employe.findOne({ where: { nom } });
-  if (!employe) employe = await Employe.create({ nom });
-
-  const pointage = await Pointage.create({
-    rapport,
-    employeId: employe.id,
-  });
-
-  res.status(201).json(pointage);
-});
 
 const start = async () => {
-  await sequelize.sync({ alter: true });
+  // await sequelize.sync({ force: true }); 
   app.listen(4000, () => console.log('Backend running on http://localhost:4000'));
 };
 
