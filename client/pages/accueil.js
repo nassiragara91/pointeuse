@@ -14,12 +14,16 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline"
 import Link from "next/link"
+import PointagePresenceModal from "../components/PointagePresenceModal"
+import { useRouter } from "next/router"
 
 export default function Accueil() {
   const { user } = useAuth()
   const [recent, setRecent] = useState([])
   const [loading, setLoading] = useState(true)
   const [userName, setUserName] = useState("Utilisateur")
+  const router = useRouter()
+  const [modalOpen, setModalOpen] = useState(false)
 
   // Debug user object
   console.log('User object in accueil:', user)
@@ -78,15 +82,27 @@ export default function Accueil() {
   const today = new Date().toISOString().slice(0, 10)
   const hasTodayPointage = Array.isArray(recent) && recent.some((a) => a.date === today)
 
+  const handleSelect = (type) => {
+    setModalOpen(false)
+    if (type === "pointage") {
+      if (router) router.push("/addPointage")
+      else window.location.href = "/addPointage"
+    } else if (type === "presence") {
+      if (router) router.push("/rapports") // À adapter selon la page de présence
+      else window.location.href = "/rapports"
+    }
+  }
+
   const quickActions = [
     {
-      href: "/addPointage",
+      href: "#",
       icon: ClockIcon,
       title: "Ajouter un Pointage",
       description: "Enregistrer vos heures",
       color: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
+      onClick: () => setModalOpen(true),
     },
     {
       href: "/rapports",
@@ -168,6 +184,32 @@ export default function Accueil() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {quickActions.map((action, index) => {
               const IconComponent = action.icon
+              if (action.title === "Ajouter un Pointage") {
+                return (
+                  <button
+                    key={index}
+                    onClick={action.onClick}
+                    className="group relative overflow-hidden bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full text-left"
+                  >
+                    <div className="p-6">
+                      <div
+                        className={`w-14 h-14 ${action.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        <IconComponent className={`h-7 w-7 ${action.iconColor}`} />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">
+                        {action.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 group-hover:text-gray-600 transition-colors">
+                        {action.description}
+                      </p>
+                    </div>
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${action.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}
+                    />
+                  </button>
+                )
+              }
               return (
                 <Link
                   key={index}
@@ -305,6 +347,10 @@ export default function Accueil() {
             )}
           </div>
         </div>
+        <PointagePresenceModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
       </main>
     </div>
     </ProtectedRoute>
