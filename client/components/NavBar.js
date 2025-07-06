@@ -14,12 +14,14 @@ import {
   HomeIcon,
   ChevronDownIcon,
   ClockIcon,
+  CpuChipIcon,
 } from '@heroicons/react/24/outline';
 
 const navLinks = [
   { name: 'Pointage', icon: ClockIcon, href: '/addPointage' },
   { name: 'GED', icon: DocumentTextIcon, href: '/ged' },
   { name: 'Rapports', icon: ChartBarIcon, href: '/rapports' },
+  { name: 'ZKTeco', icon: CpuChipIcon, href: '/zkteco' },
   // { name: 'Applications', icon: Squares2X2Icon, href: '#' },
   { name: 'Recherche', icon: MagnifyingGlassIcon, href: '#' },
 ];
