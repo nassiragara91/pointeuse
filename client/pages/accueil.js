@@ -61,12 +61,26 @@ function HistoriqueZkteco() {
               <td colSpan={2} className="text-center py-4 text-gray-400">Aucun pointage</td>
             </tr>
           ) : (
-            filtered.map((p, idx) => (
-              <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="px-3 py-2 border-b text-gray-900">{p.project || p.typePointage || "ZKTeco"}</td>
-                <td className="px-3 py-2 border-b text-gray-900">{p.timeIn || p.timeOut || "--:--:--"}</td>
-              </tr>
-            ))
+            filtered.flatMap((p, idx) => {
+              const rows = [];
+              if (p.timeIn) {
+                rows.push(
+                  <tr key={idx + '-in'} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <td className="px-3 py-2 border-b text-gray-900">Porte d'entrée</td>
+                    <td className="px-3 py-2 border-b text-gray-900">{p.timeIn}</td>
+                  </tr>
+                );
+              }
+              if (p.timeOut) {
+                rows.push(
+                  <tr key={idx + '-out'} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <td className="px-3 py-2 border-b text-gray-900">Porte de sortie</td>
+                    <td className="px-3 py-2 border-b text-gray-900">{p.timeOut}</td>
+                  </tr>
+                );
+              }
+              return rows;
+            })
           )}
         </tbody>
       </table>
