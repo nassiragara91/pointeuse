@@ -49,3 +49,18 @@ export const updatePointage = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la mise à jour', error });
   }
 };
+
+// Endpoint pour l'historique de présence ZKTeco de l'utilisateur connecté
+export const getMyZktecoPointages = async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: 'Non authentifié' });
+    const data = await Pointage.findAll({
+      where: { employeId: req.user.id, typePointage: 'AUTOMATIQUE' },
+      order: [['date', 'DESC']],
+      limit: 20,
+    });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error });
+  }
+};
