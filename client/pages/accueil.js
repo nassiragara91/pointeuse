@@ -156,7 +156,7 @@ export default function Accueil() {
     {
       href: "#",
       icon: ClockIcon,
-      title: "Ajouter un Pointage",
+      title: "Gestion de Pointage",
       description: "Enregistrer vos heures",
       color: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-50",
@@ -247,7 +247,7 @@ export default function Accueil() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {quickActions.map((action, index) => {
                     const IconComponent = action.icon
-                    if (action.title === "Ajouter un Pointage") {
+                    if (action.title === "Gestion de Pointage") {
                       return (
                         <button
                           key={index}
@@ -335,7 +335,7 @@ export default function Accueil() {
                         className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
                       >
                         <ClockIcon className="h-5 w-5" />
-                        Ajouter un pointage
+                        Gestion de Pointage
                       </Link>
                     </div>
                   ) : (

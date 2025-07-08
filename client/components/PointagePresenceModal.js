@@ -1,27 +1,51 @@
 import React, { useState } from "react";
-
-const mockData = [
-  {
-    date: "02/06/2025 00:00:00",
-    entries: [
-      { time: "09:35:17", door: "Porte d'entrée escalier Lac2" },
-      { time: "11:25:41", door: "Porte de sortie principale Lac2" },
-      { time: "11:28:03", door: "Porte d'entrée Principale Lac2" },
-      { time: "12:22:48", door: "Porte de sortie principale Lac2" },
-      { time: "13:23:25", door: "Porte d'entrée Principale Lac2" },
-      { time: "15:43:49", door: "Porte de sortie escalier Lac2" },
-    ],
-  },
-];
+import { useAuth } from "../contexts/AuthContext";
 
 export default function PointagePresenceModal({ open, onClose }) {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("presence");
-  const [employe, setEmploye] = useState("Mohamed Zendaoui");
   const [dateDebut, setDateDebut] = useState("2025-06-01");
   const [dateFin, setDateFin] = useState("2025-07-06");
-  const [data, setData] = useState(mockData);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
+
+  // Fonction pour regrouper les logs par jour
+  function groupByDate(logs) {
+    const map = {};
+    logs.forEach(log => {
+      const date = log.timestamp.slice(0, 10);
+      if (!map[date]) map[date] = [];
+      map[date].push(log);
+    });
+    // Retourne un tableau [{date, entries: [...] }]
+    return Object.entries(map).map(([date, entries]) => ({
+      date,
+      entries: entries.map(log => ({
+        time: log.timestamp.slice(11, 19),
+        door: log.type === "IN" ? "Porte d'entrée" : "Porte de sortie"
+      }))
+    })).sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  // Handler pour le bouton Valider
+  const handleValider = async () => {
+    setLoading(true);
+    const res = await fetch(
+      `http://localhost:4000/api/zkteco/my-history-period?dateDebut=${dateDebut}&dateFin=${dateFin}`,
+      { credentials: "include" }
+    );
+    let logs = [];
+    try {
+      logs = await res.json();
+      if (!Array.isArray(logs)) logs = [];
+    } catch (e) {
+      logs = [];
+    }
+    setData(groupByDate(logs));
+    setLoading(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
@@ -51,13 +75,14 @@ export default function PointagePresenceModal({ open, onClose }) {
           {activeTab === "presence" && (
             <>
               {/* Formulaire */}
-              <form className="flex flex-wrap items-end gap-4 mb-4">
+              <form className="flex flex-wrap items-end gap-4 mb-4" onSubmit={e => { e.preventDefault(); handleValider(); }}>
                 <div className="flex flex-col">
                   <label className="text-sm mb-1 text-gray-800">Employé</label>
                   <input
-                    className="border rounded px-2 py-1 min-w-[180px] text-gray-900"
-                    value={employe}
-                    onChange={e => setEmploye(e.target.value)}
+                    className="border rounded px-2 py-1 min-w-[180px] text-gray-900 bg-gray-100"
+                    value={user?.nom || ""}
+                    readOnly
+                    disabled
                   />
                 </div>
                 <div className="flex flex-col">
@@ -78,14 +103,14 @@ export default function PointagePresenceModal({ open, onClose }) {
                     onChange={e => setDateFin(e.target.value)}
                   />
                 </div>
-                <button type="button" className="bg-blue-500 text-white px-4 py-2 rounded ml-2">Valider</button>
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded ml-2">Valider</button>
               </form>
               {/* Titre */}
               <div className="text-blue-700 font-semibold text-center mb-2">
-                Présence de {employe}
+                Présence de {user?.nom || ""}
               </div>
               {/* Tableau */}
-              <div className="overflow-x-auto rounded border">
+              <div className="overflow-x-auto rounded border" style={{ maxHeight: "350px", overflowY: "auto" }}>
                 <table className="min-w-full text-sm">
                   <thead className="bg-gray-50">
                     <tr>
@@ -94,21 +119,31 @@ export default function PointagePresenceModal({ open, onClose }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((day, i) => (
-                      <React.Fragment key={i}>
-                        <tr className="bg-gray-100">
-                          <td colSpan={2} className="px-4 py-2 font-medium text-gray-700 border-b">
-                            Date: {day.date}
-                          </td>
-                        </tr>
-                        {day.entries.map((entry, j) => (
-                          <tr key={j}>
-                            <td className="px-4 py-2 border-b text-gray-600">{entry.time}</td>
-                            <td className="px-4 py-2 border-b text-gray-600">{entry.door}</td>
+                    {loading ? (
+                      <tr>
+                        <td colSpan={2} className="text-center py-4 text-gray-400">Chargement...</td>
+                      </tr>
+                    ) : data.length === 0 ? (
+                      <tr>
+                        <td colSpan={2} className="text-center py-4 text-gray-400">Aucun pointage</td>
+                      </tr>
+                    ) : (
+                      data.map((day, i) => (
+                        <React.Fragment key={i}>
+                          <tr className="bg-gray-100">
+                            <td colSpan={2} className="px-4 py-2 font-medium text-gray-700 border-b">
+                              Date: {day.date}
+                            </td>
                           </tr>
-                        ))}
-                      </React.Fragment>
-                    ))}
+                          {day.entries.map((entry, j) => (
+                            <tr key={j}>
+                              <td className="px-4 py-2 border-b text-gray-600">{entry.time}</td>
+                              <td className="px-4 py-2 border-b text-gray-600">{entry.door}</td>
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

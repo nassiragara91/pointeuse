@@ -1,4 +1,5 @@
 import { ZKTecoLog, Employe, Pointage } from '../models/index.js';
+import { Op } from 'sequelize';
 
 // Endpoint pour recevoir les données de pointage de la pointeuse ZKTeco
 export const receivePointageData = async (req, res) => {
@@ -262,6 +263,29 @@ export const getMyZktecoHistory = async (req, res) => {
       where: { employeId: req.user.id },
       order: [['timestamp', 'DESC']],
       limit: 50,
+    });
+    res.json(logs);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur serveur", error });
+  }
+}; 
+
+// Récupérer l'historique ZKTeco de l'utilisateur connecté sur une période
+export const getMyZktecoHistoryByPeriod = async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: "Non authentifié" });
+    const { dateDebut, dateFin } = req.query;
+    if (!dateDebut || !dateFin) {
+      return res.status(400).json({ message: "Paramètres manquants" });
+    }
+    const logs = await ZKTecoLog.findAll({
+      where: {
+        employeId: req.user.id,
+        timestamp: {
+          [Op.between]: [new Date(dateDebut), new Date(dateFin + 'T23:59:59')]
+        }
+      },
+      order: [['timestamp', 'ASC']]
     });
     res.json(logs);
   } catch (error) {
