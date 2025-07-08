@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const navLinks = [
-  { name: 'Pointage', icon: ClockIcon, href: '/addPointage' },
+  // { name: 'Pointage', icon: ClockIcon, href: '/addPointage' }, // supprimé
   { name: 'GED', icon: DocumentTextIcon, href: '/ged' },
   { name: 'Rapports', icon: ChartBarIcon, href: '/rapports' },
   { name: 'ZKTeco', icon: CpuChipIcon, href: '/zkteco' },

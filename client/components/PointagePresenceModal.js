@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import PointageForm from "./PointageForm";
 
 export default function PointagePresenceModal({ open, onClose }) {
   const { user } = useAuth();
@@ -150,7 +151,9 @@ export default function PointagePresenceModal({ open, onClose }) {
             </>
           )}
           {activeTab === "pointage" && (
-            <div className="text-center text-gray-500 py-8">Section Pointage (contenu à définir)</div>
+            <div className="py-4" style={{ maxHeight: "400px", overflowY: "auto" }}>
+              <PointageForm initialNom={user?.nom || ""} />
+            </div>
           )}
         </div>
       </div>
