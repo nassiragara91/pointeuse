@@ -137,6 +137,11 @@ export default function Accueil() {
       .finally(() => setLoading(false))
   }, [])
 
+  // Filtrer les pointages de présence
+  const filteredRecent = Array.isArray(recent)
+    ? recent.filter(a => !(a.type === "Pointage" && a.typeTache && a.typeTache.toUpperCase() === "PRESENCE"))
+    : [];
+
   // Vérifie si un pointage du jour existe
   const today = new Date().toISOString().slice(0, 10)
   const hasTodayPointage = Array.isArray(recent) && recent.some((a) => a.date === today)
@@ -323,7 +328,7 @@ export default function Accueil() {
                         <span className="text-gray-600">Chargement des activités...</span>
                       </div>
                     </div>
-                  ) : recent.length === 0 ? (
+                  ) : filteredRecent.length === 0 ? (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <XCircleIcon className="h-8 w-8 text-gray-400" />
@@ -353,7 +358,7 @@ export default function Accueil() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-50">
-                            {recent.map((a, index) => (
+                            {filteredRecent.map((a, index) => (
                               <tr key={a.id} className="hover:bg-gray-50 transition-colors duration-150">
                                 <td className="py-4 px-4">
                                   <span className="text-sm font-medium text-gray-900">{a.date}</span>

@@ -102,6 +102,11 @@ const processPointageData = async (zkLog) => {
     });
 
     if (zkLog.type === 'IN') {
+      // Vérification du scan facial obligatoire à l'entrée
+      if (!zkLog.faceId) {
+        console.log(`Entrée refusée pour ${zkLog.userName} : scan facial manquant.`);
+        return;
+      }
       // Pointage d'entrée
       if (existingPointage) {
         // Mettre à jour le timeIn si pas déjà défini
@@ -121,6 +126,11 @@ const processPointageData = async (zkLog) => {
         });
       }
     } else if (zkLog.type === 'OUT') {
+      // Vérification de l'empreinte digitale obligatoire à la sortie
+      if (!zkLog.fingerId) {
+        console.log(`Sortie refusée pour ${zkLog.userName} : empreinte digitale manquante.`);
+        return;
+      }
       // Pointage de sortie
       if (existingPointage) {
         // Mettre à jour le timeOut

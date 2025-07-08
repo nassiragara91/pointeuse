@@ -9,7 +9,7 @@ export default function PointageForm({ initialNom = "", onSuccess }) {
   const [typePointage, setTypePointage] = useState("affaire");
   const [project, setProject] = useState("");
   const [documentCode, setDocumentCode] = useState("");
-  const [taskType, setTaskType] = useState("Conception");
+  const [taskType, setTaskType] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Calculate total hours worked
@@ -130,26 +130,21 @@ export default function PointageForm({ initialNom = "", onSuccess }) {
             >
               <option value="affaire">Pointage sur Affaire</option>
               <option value="document">Pointage sur Document</option>
-              <option value="AUTOMATIQUE">Automatique (ZKTeco)</option>
             </select>
           </div>
           <div>
             <label htmlFor="taskType" className="block text-sm font-medium text-gray-700 mb-2">
               Type de tâche
             </label>
-            <select
+            <input
+              type="text"
               id="taskType"
               value={taskType}
               onChange={e => setTaskType(e.target.value)}
               className="w-full px-4 py-3 border-2 border-blue-400 bg-blue-50 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow transition-all duration-200"
-            >
-              <option value="Conception">Conception</option>
-              <option value="Calcul technique">Calcul technique</option>
-              <option value="Revue documentaire">Revue documentaire</option>
-              <option value="Réunion client">Réunion client</option>
-              <option value="Déplacement terrain">Déplacement terrain</option>
-              <option value="Autre">Autre</option>
-            </select>
+              placeholder="Type de tâche..."
+              required
+            />
           </div>
         </div>
         {typePointage === "affaire" && (

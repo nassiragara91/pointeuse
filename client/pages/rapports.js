@@ -103,6 +103,14 @@ export default function Rapports() {
     setLoading(false)
   }
 
+  // Filtrer les pointages de présence ou automatiques pour la liaison
+  const filteredPointages = Array.isArray(pointages)
+    ? pointages.filter(p =>
+        (p.typePointage?.toUpperCase() !== 'AUTOMATIQUE') &&
+        (p.taskType?.toUpperCase() !== 'PRESENCE')
+      )
+    : [];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
@@ -221,7 +229,7 @@ export default function Rapports() {
                 className="w-full px-4 py-3 border-2 border-blue-400 bg-blue-50 text-gray-900 placeholder-blue-400 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow transition-all duration-200"
               >
                 <option value="">-- Aucun, rapport libre --</option>
-                {pointages.map((p) => (
+                {filteredPointages.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.date} - {p.typePointage} - {p.rapport?.slice(0, 20) || "Pas de rapport"}
                   </option>
