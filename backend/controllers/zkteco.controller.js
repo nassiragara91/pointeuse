@@ -253,3 +253,18 @@ export const getDeviceConfig = async (req, res) => {
     res.status(500).json({ message: 'Erreur interne du serveur' });
   }
 }; 
+
+// Récupérer l'historique ZKTeco de l'utilisateur connecté
+export const getMyZktecoHistory = async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: "Non authentifié" });
+    const logs = await ZKTecoLog.findAll({
+      where: { employeId: req.user.id },
+      order: [['timestamp', 'DESC']],
+      limit: 50,
+    });
+    res.json(logs);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur serveur", error });
+  }
+}; 

@@ -4,8 +4,10 @@ import {
   getZKTecoLogs,
   getUnprocessedLogs,
   processLog,
-  getDeviceConfig
+  getDeviceConfig,
+  getMyZktecoHistory
 } from '../controllers/zkteco.controller.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -19,5 +21,6 @@ router.get('/config', getDeviceConfig);
 router.get('/logs', getZKTecoLogs);
 router.get('/logs/unprocessed', getUnprocessedLogs);
 router.post('/logs/:id/process', processLog);
+router.get('/my-history', protect, getMyZktecoHistory);
 
 export default router; 

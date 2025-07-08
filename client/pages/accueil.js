@@ -22,18 +22,18 @@ function formatDate(date) {
 }
 
 function HistoriqueZkteco() {
-  const [pointages, setPointages] = useState([]);
+  const [logs, setLogs] = useState([]);
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   useEffect(() => {
-    fetch('http://localhost:4000/pointages/zkteco/my-history', { credentials: 'include' })
+    fetch('http://localhost:4000/api/zkteco/my-history', { credentials: 'include' })
       .then(res => res.json())
-      .then(setPointages);
+      .then(setLogs);
   }, []);
 
-  // Filtrer les pointages du jour sélectionné
-  const filtered = pointages.filter(
-    p => p.date === selectedDate
+  // Filtrer les logs du jour sélectionné
+  const filtered = logs.filter(
+    log => log.timestamp && log.timestamp.slice(0, 10) === selectedDate
   );
 
   return (
@@ -53,34 +53,22 @@ function HistoriqueZkteco() {
           <tr className="bg-gray-200">
             <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Porte</th>
             <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Heure</th>
+            <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Type</th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={2} className="text-center py-4 text-gray-400">Aucun pointage</td>
+              <td colSpan={3} className="text-center py-4 text-gray-400">Aucun pointage</td>
             </tr>
           ) : (
-            filtered.flatMap((p, idx) => {
-              const rows = [];
-              if (p.timeIn) {
-                rows.push(
-                  <tr key={idx + '-in'} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                    <td className="px-3 py-2 border-b text-gray-900">Porte d'entrée</td>
-                    <td className="px-3 py-2 border-b text-gray-900">{p.timeIn}</td>
-                  </tr>
-                );
-              }
-              if (p.timeOut) {
-                rows.push(
-                  <tr key={idx + '-out'} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                    <td className="px-3 py-2 border-b text-gray-900">Porte de sortie</td>
-                    <td className="px-3 py-2 border-b text-gray-900">{p.timeOut}</td>
-                  </tr>
-                );
-              }
-              return rows;
-            })
+            filtered.map((log, idx) => (
+              <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                <td className="px-3 py-2 border-b text-gray-900">{log.deviceName || "ZKTeco"}</td>
+                <td className="px-3 py-2 border-b text-gray-900">{log.timestamp?.slice(11, 19)}</td>
+                <td className="px-3 py-2 border-b text-gray-900">{log.type === "IN" ? "Entrée" : "Sortie"}</td>
+              </tr>
+            ))
           )}
         </tbody>
       </table>
