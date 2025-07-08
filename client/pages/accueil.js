@@ -53,20 +53,20 @@ function HistoriqueZkteco() {
           <tr className="bg-gray-200">
             <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Porte</th>
             <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Heure</th>
-            <th className="text-left px-3 py-2 border-b text-gray-700 font-semibold">Type</th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={3} className="text-center py-4 text-gray-400">Aucun pointage</td>
+              <td colSpan={2} className="text-center py-4 text-gray-400">Aucun pointage</td>
             </tr>
           ) : (
             filtered.map((log, idx) => (
               <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="px-3 py-2 border-b text-gray-900">{log.deviceName || "ZKTeco"}</td>
+                <td className="px-3 py-2 border-b text-gray-900">
+                  {log.type === "IN" ? "Porte d'entrée" : "Porte de sortie"}
+                </td>
                 <td className="px-3 py-2 border-b text-gray-900">{log.timestamp?.slice(11, 19)}</td>
-                <td className="px-3 py-2 border-b text-gray-900">{log.type === "IN" ? "Entrée" : "Sortie"}</td>
               </tr>
             ))
           )}
