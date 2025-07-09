@@ -41,7 +41,7 @@ export default function AdminActionsModal({ open, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm animate-fade-in">
-      <div className={`bg-white rounded-3xl shadow-2xl border w-full relative animate-fade-in-up p-0 ${selectedAction ? 'max-w-6xl' : 'max-w-2xl'}` }>
+      <div className={`bg-white rounded-3xl shadow-2xl border w-full relative animate-fade-in-up p-0 max-w-full md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-2 md:mx-auto max-h-screen sm:max-h-[90vh] overflow-y-auto`}>
         {/* Bouton de fermeture */}
         <button
           onClick={onClose}
@@ -51,7 +51,7 @@ export default function AdminActionsModal({ open, onClose }) {
           ×
         </button>
         {/* Affichage grille ou formulaire */}
-        <div className="pt-8 pb-2 px-8">
+        <div className="pt-4 pb-2 px-4 md:pt-8 md:px-8">
           {!selectedAction && (
             <>
               <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-2">Actions Administratives</h2>
@@ -59,7 +59,7 @@ export default function AdminActionsModal({ open, onClose }) {
             </>
           )}
         </div>
-        <div className="px-6 pb-8">
+        <div className="px-4 pb-4 md:px-6 md:pb-8">
           {!selectedAction ? (
             <div className="grid grid-cols-2 gap-5">
               {actions.map((action, idx) => {

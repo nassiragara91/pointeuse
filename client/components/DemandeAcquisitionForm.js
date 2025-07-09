@@ -10,11 +10,11 @@ export default function DemandeAcquisitionForm({ onCancel }) {
         >
           ← Retour
         </button>
-        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Créer demande acquisition</h2>
+        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Demande d'acquisition</h2>
         <span className="w-20" />
       </div>
       <div className="border-b border-blue-200 mb-6" />
-      <form className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         {/* Société */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Société:</label>
         <input className="col-span-1 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" placeholder="Société" />

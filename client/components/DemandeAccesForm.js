@@ -10,12 +10,12 @@ export default function DemandeAccesForm({ onCancel }) {
         >
           ← Retour
         </button>
-        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Accès</h2>
+        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Demande d'accès</h2>
         <span className="w-20" />
       </div>
       <div className="border-b border-blue-200 mb-6" />
       {/* Partie haute organisée en grille simple */}
-      <form className="grid grid-cols-3 gap-x-6 gap-y-6 mb-8">
+      <form className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 mb-8">
         {/* Ligne 1 */}
         <div>
           <label className="block font-bold text-blue-900 mb-1">Matricule</label>
@@ -33,12 +33,14 @@ export default function DemandeAccesForm({ onCancel }) {
         <div>
           <label className="block font-bold text-blue-900 mb-1">Type d'accès <span className="text-red-500">*</span></label>
           <select className="w-full border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base">
-            <option>Choisir...</option>
+            <option value="" disabled>Choisir...</option>
+            <option value="serveur">Serveur de Fichiers</option>
+            <option value="ged">GED</option>
           </select>
         </div>
         <div>
           <label className="block font-bold text-blue-900 mb-1">Société <span className="text-red-500">*</span></label>
-          <input className="w-full border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" placeholder="Société" />
+          <input className="w-full border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" placeholder="Société" value="HVEK" readOnly />
         </div>
         <div>
           <label className="block font-bold text-blue-900 mb-1">Liste des Projets <span className="text-red-500">*</span></label>
@@ -49,7 +51,11 @@ export default function DemandeAccesForm({ onCancel }) {
         {/* Ligne 3 */}
         <div>
           <label className="block font-bold text-blue-900 mb-1">Droit d'accès <span className="text-red-500">*</span></label>
-          <input className="w-full border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" placeholder="Droit d'accès" />
+          <select className="w-full border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base">
+            <option value="" disabled>Choisir...</option>
+            <option value="lecture">Lecture</option>
+            <option value="ecriture">Écriture</option>
+          </select>
         </div>
         <div>
           <label className="block font-bold text-blue-900 mb-1">Date <span className="text-red-500">*</span></label>
@@ -58,7 +64,7 @@ export default function DemandeAccesForm({ onCancel }) {
         <div />
       </form>
       {/* Suite du formulaire (description, pièces jointes, supérieur hiérarchique) inchangée */}
-      <form className="grid grid-cols-3 gap-x-6 gap-y-4">
+      <form className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
         {/* Description */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Description</label>
         <textarea className="col-span-2 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base min-h-32 resize-y" placeholder="Description" />

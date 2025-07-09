@@ -10,11 +10,11 @@ export default function DemandeCongeForm({ onCancel }) {
         >
           ← Retour
         </button>
-        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Créer demande de congé</h2>
+        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Demande de congé</h2>
         <span className="w-20" />
       </div>
       <div className="border-b border-blue-200 mb-6" />
-      <form className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         {/* Nom et prénom */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Nom et prénom</label>
         <input className="col-span-1 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" value="Mohamed  Zendaoui" readOnly />
@@ -44,6 +44,15 @@ export default function DemandeCongeForm({ onCancel }) {
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Au titre de <span className="text-red-500 ml-1">*</span></label>
         <select className="col-span-1 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" defaultValue="" >
           <option value="" disabled>Choisir...</option>
+          <option value="conge">Congé</option>
+          <option value="maladie">Maladie</option>
+          <option value="compensateur">congé compensateur</option>
+          <option value="mission">Récupération sur Mission</option>
+          <option value="familiales">congés spéciaux pour des raisons familiales</option>
+          <option value="maternite">congé de maternité</option>
+          <option value="sans-solde">congé sans solde</option>
+          <option value="teletravail">Télétravail</option>
+          <option value="standby">Stand-by</option>
         </select>
         {/* Description */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Description</label>

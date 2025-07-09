@@ -10,11 +10,11 @@ export default function DemandeAutorisationForm({ onCancel }) {
         >
           ← Retour
         </button>
-        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Créer autorisation</h2>
+        <h2 className="text-2xl font-extrabold text-blue-800 text-center flex-1">Demande d'autorisation</h2>
         <span className="w-20" />
       </div>
       <div className="border-b border-blue-200 mb-6" />
-      <form className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         {/* Nom et prénom */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Nom et prénom</label>
         <input className="col-span-1 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" value="Mohamed Zendaoui" readOnly />
@@ -31,6 +31,10 @@ export default function DemandeAutorisationForm({ onCancel }) {
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Au titre de</label>
         <select className="col-span-1 border rounded-lg px-3 py-2 shadow-sm bg-white text-gray-900 text-base" defaultValue="">
           <option value="" disabled>Choisir...</option>
+          <option value="personnel">Autorisation Personnel</option>
+          <option value="formation">Formation</option>
+          <option value="badge">Oubli de badge</option>
+          <option value="professionnelle">Autorisation Professionnelle</option>
         </select>
         {/* Destination */}
         <label className="col-span-1 font-bold text-blue-900 flex items-center">Destination:</label>
