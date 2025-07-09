@@ -16,6 +16,7 @@ import {
 import Link from "next/link"
 import PointagePresenceModal from "../components/PointagePresenceModal"
 import { useRouter } from "next/router"
+import AdminActionsModal from "../components/AdminActionsModal";
 
 function formatDate(date) {
   return date.toISOString().slice(0, 10);
@@ -83,6 +84,7 @@ export default function Accueil() {
   const [userName, setUserName] = useState("Utilisateur")
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
 
   // Debug user object
   console.log('User object in accueil:', user)
@@ -188,12 +190,13 @@ export default function Accueil() {
     },
     {
       href: "#",
-      icon: ChartBarIcon,
-      title: "Statistiques",
-      description: "Analyser vos données",
+      icon: CheckCircleIcon,
+      title: "Administratifs",
+      description: "Gestion administrative",
       color: "from-pink-500 to-pink-600",
       bgColor: "bg-pink-50",
       iconColor: "text-pink-600",
+      onClick: () => setAdminModalOpen(true),
     },
   ]
 
@@ -282,6 +285,7 @@ export default function Accueil() {
                       <Link
                         key={index}
                         href={action.href}
+                        onClick={action.onClick}
                         className="group relative overflow-hidden bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                       >
                         <div className="p-6">
@@ -421,6 +425,7 @@ export default function Accueil() {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           />
+          <AdminActionsModal open={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
         </main>
       </div>
     </ProtectedRoute>
