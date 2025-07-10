@@ -8,6 +8,7 @@ import documentRouter from './routers/document.router.js';
 import rapportRouter from './routers/rapport.router.js';
 import activiteRouter from './routers/activite.router.js';
 import zktecoRouter from './routers/zkteco.router.js';
+import usersRouter from './routers/users.router.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/documents', documentRouter);
 app.use('/rapports', rapportRouter);
 app.use('/activites', activiteRouter);
 app.use('/api/zkteco', zktecoRouter);
+app.use('/api/users', usersRouter);
 
 
 const start = async () => {

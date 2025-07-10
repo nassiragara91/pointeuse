@@ -47,4 +47,11 @@ const protect = async (req, res, next) => {
   }
 };
 
-export { protect }; 
+const isAdminOrRH = (req, res, next) => {
+  if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'hr_manager')) {
+    return res.status(403).json({ message: 'Accès refusé : droits insuffisants' });
+  }
+  next();
+};
+
+export { protect, isAdminOrRH }; 
