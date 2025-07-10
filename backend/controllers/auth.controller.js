@@ -15,7 +15,7 @@ export const login = async (req, res) => {
   }
 
   const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', {
-    expiresIn: '7d',
+    expiresIn: '1h',
   });
 
   res.json({ 
@@ -40,7 +40,7 @@ export const register = async (req, res) => {
   }
   try {
     const employe = await Employe.create({ nom, email, password });
-    const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', { expiresIn: '7d' });
+    const token = jwt.sign({ id: employe.id, nom: employe.nom }, 'your_jwt_secret', { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la création du compte.' });
